@@ -16,7 +16,7 @@ import model.JavaBeans;
 /**
  * Servlet implementation class Controller
  */
-@WebServlet(urlPatterns = { "/Controller", "/main", "/insert" })
+@WebServlet(urlPatterns = { "/Controller", "/main", "/insert", "/select" })
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAO dao = new DAO();
@@ -43,10 +43,22 @@ public class Controller extends HttpServlet {
 			contatos(request, response);
 		} else if (action.equals("/insert")) {
 			novoContato(request, response);
+		} else if (action.equals("/select")) {
+			listarContato(request, response);
 		} else {
 			response.sendRedirect("index.html");
 		}
 
+	}
+
+	private void listarContato(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		String idcon = request.getParameter("idcon");
+		JavaBeans contato = dao.selecionarContato(idcon);
+		System.out.println(contato.getIdcon());
+		System.out.println(contato.getNome());
+		System.out.println(contato.getFone());
+		System.out.println(contato.getEmail());
 	}
 
 	// Listas contatos
