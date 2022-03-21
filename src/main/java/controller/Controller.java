@@ -51,14 +51,16 @@ public class Controller extends HttpServlet {
 
 	}
 
-	private void listarContato(HttpServletRequest request, HttpServletResponse response) {
+	private void listarContato(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String idcon = request.getParameter("idcon");
+		Integer idcon = Integer.parseInt(request.getParameter("idCon"));
 		JavaBeans contato = dao.selecionarContato(idcon);
-		System.out.println(contato.getIdcon());
-		System.out.println(contato.getNome());
-		System.out.println(contato.getFone());
-		System.out.println(contato.getEmail());
+		request.setAttribute("idCon", contato.getIdcon());
+		request.setAttribute("nome", contato.getNome());
+		request.setAttribute("fone", contato.getFone());
+		request.setAttribute("email", contato.getEmail());
+		RequestDispatcher rd = request.getRequestDispatcher("editar.jsp");
+		rd.forward(request, response);
 	}
 
 	// Listas contatos
@@ -74,7 +76,7 @@ public class Controller extends HttpServlet {
 	protected void novoContato(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// Setar as variáveis JavaBeans
+		// Setar as variï¿½veis JavaBeans
 		contato.setNome(request.getParameter("nome"));
 		contato.setFone(request.getParameter("fone"));
 		contato.setEmail(request.getParameter("email"));

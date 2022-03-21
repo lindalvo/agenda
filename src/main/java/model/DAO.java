@@ -7,15 +7,15 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class DAO {
-	/** modulo de conexão **/
-	// pamateros de conexão
+	/** modulo de conexï¿½o **/
+	// pamateros de conexï¿½o
 
 	private String driver = "com.mysql.cj.jdbc.Driver";
 	private String url = "jdbc:mysql://127.0.0.1:3306/dbagenda?useTimeZone=UTC";
 	private String user = "root";
 	private String password = "mysql";
 
-	// Método de conexão
+	// Mï¿½todo de conexï¿½o
 	private Connection conectar() {
 		Connection con = null;
 		try {
@@ -46,7 +46,7 @@ public class DAO {
 	
 	/** crud read**/
 	public ArrayList<JavaBeans> listarContatos() {
-		ArrayList<JavaBeans> contatos = new ArrayList<>();
+		ArrayList<JavaBeans> contatos = new ArrayList<JavaBeans>();
 		String read = "select * from contatos order by nome";
 		try {
 			Connection con = conectar();
@@ -69,13 +69,12 @@ public class DAO {
 		}
 	}
 	
-	public JavaBeans selecionarContato(String pidcon ) {
-		String read2 = "select * from contatos where idcon = ?";
+	public JavaBeans selecionarContato(Integer pidcon) {
+		String read2 = "select * from contatos where idcon = " + String.valueOf(pidcon);
 		JavaBeans resultado = null;
 		try {
 			Connection con = conectar();
 			PreparedStatement pst = con.prepareStatement(read2);
-			pst.setString(1, pidcon);
 			ResultSet rs = pst.executeQuery(read2);
 			if (rs.next()) {
 				String idcon = rs.getString(1);
