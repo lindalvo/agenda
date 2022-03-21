@@ -10,13 +10,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import model.DAO;
 import model.JavaBeans;
 
 /**
  * Servlet implementation class Controller
  */
-@WebServlet(urlPatterns = { "/Controller", "/main", "/insert", "/select" })
+@WebServlet(urlPatterns = { "/Controller", "/main", "/insert", "/select", "/update", "/delete", "/report" })
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAO dao = new DAO();
@@ -38,13 +44,18 @@ public class Controller extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String action = request.getServletPath();
-		System.out.println(action);
 		if (action.equals("/main")) {
 			contatos(request, response);
 		} else if (action.equals("/insert")) {
 			novoContato(request, response);
 		} else if (action.equals("/select")) {
 			listarContato(request, response);
+		} else if (action.equals("/update")) {
+			editarContato(request, response);
+		} else if (action.equals("/delete")) {
+			excluirContato(request, response);
+		} else if (action.equals("/report")) {
+			gerarRelatorio(request, response);
 		} else {
 			response.sendRedirect("index.html");
 		}
@@ -53,8 +64,7 @@ public class Controller extends HttpServlet {
 
 	private void listarContato(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		Integer idcon = Integer.parseInt(request.getParameter("idCon"));
-		JavaBeans contato = dao.selecionarContato(idcon);
+		JavaBeans contato = dao.selecionarContato(Integer.parseInt(request.getParameter("idCon")));
 		request.setAttribute("idCon", contato.getIdcon());
 		request.setAttribute("nome", contato.getNome());
 		request.setAttribute("fone", contato.getFone());
@@ -84,4 +94,55 @@ public class Controller extends HttpServlet {
 		response.sendRedirect("main");
 	}
 
+	protected void editarContato(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		// Setar as variaveis JavaBeans
+		contato.setIdcon(request.getParameter("idCon"));
+		contato.setNome(request.getParameter("nome"));
+		contato.setFone(request.getParameter("fone"));
+		contato.setEmail(request.getParameter("email"));
+		dao.editarContato(contato);
+		response.sendRedirect("main");
+	}
+
+	protected void excluirContato(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		// Setar as variaveis JavaBeans
+		dao.excluirContato(request.getParameter("idCon"));
+		response.sendRedirect("main");
+	}
+
+	protected void gerarRelatorio(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		Document documento = new Document();
+		try {
+			response.setContentType("application/pdf");
+			response.addHeader("Content-Disposition", "inline; filename=contato.pdf");
+			PdfWriter.getInstance(documento, response.getOutputStream());
+			documento.open();
+			documento.add(new Paragraph("Lista de contato"));
+			documento.add(new Paragraph(" "));
+			PdfPTable tabela = new PdfPTable(3);
+			PdfPCell col1 = new PdfPCell(new Paragraph("Nome"));
+			PdfPCell col2 = new PdfPCell(new Paragraph("Fone"));
+			PdfPCell col3 = new PdfPCell(new Paragraph("Email"));
+			tabela.addCell(col1);
+			tabela.addCell(col2);
+			tabela.addCell(col3);
+			ArrayList<JavaBeans> lista = dao.listarContatos();
+			for (int i = 0; i < lista.size(); i++) {
+				tabela.addCell(lista.get(i).getNome());
+				tabela.addCell(lista.get(i).getFone());
+				tabela.addCell(lista.get(i).getEmail());
+			}
+			documento.add(tabela);
+			documento.close();
+		} catch (Exception e) {
+			System.out.println(e);
+			documento.close();
+		}
+	}
+	
 }

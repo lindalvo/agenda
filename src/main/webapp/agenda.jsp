@@ -3,6 +3,7 @@
 <%@ page import="model.JavaBeans"%>
 <%@ page import="java.util.ArrayList"%>
 <%
+@ SuppressWarnings ("unchecked")
 ArrayList<JavaBeans> lista = (ArrayList<JavaBeans>) request.getAttribute("contatos");
 %>
 
@@ -10,6 +11,8 @@ ArrayList<JavaBeans> lista = (ArrayList<JavaBeans>) request.getAttribute("contat
 <html lang="pt-BR">
 <link rel="icon" href="imagens/favicon.png">
 <link rel="stylesheet" href="style.css">
+<script src="scripts/confirmador.js"></script>
+
 <head>
 <meta charset="utf-8">
 <title>Agenda de contatos</title>
@@ -36,7 +39,10 @@ ArrayList<JavaBeans> lista = (ArrayList<JavaBeans>) request.getAttribute("contat
 				<td><%=lista.get(i).getNome()%></td>
 				<td><%=lista.get(i).getFone()%></td>
 				<td><%=lista.get(i).getEmail()%></td>
-				<td><a href="select?idCon=<%=lista.get(i).getIdcon()%>" class="bota1">Editar</a></td>
+				<td><a href="select?idCon=<%=lista.get(i).getIdcon()%>"
+					class="botao1">Editar</a> <a
+					href="javascript:confirmar(<%=lista.get(i).getIdcon()%>)"
+					class="botao2">Excluir</a></td>
 			</tr>
 			<%
 			}

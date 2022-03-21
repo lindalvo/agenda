@@ -29,7 +29,7 @@ public class DAO {
 	}
 
 	public void inserirContato(JavaBeans contato) {
-		String create = "insert into contatos (nome,fone,email) values (?,?,?)";
+		String create = "insert into dbagenda.contatos (nome,fone,email) values (?,?,?)";
 		try {
 			Connection con = conectar();
 			PreparedStatement pst = con.prepareStatement(create);
@@ -47,7 +47,7 @@ public class DAO {
 	/** crud read**/
 	public ArrayList<JavaBeans> listarContatos() {
 		ArrayList<JavaBeans> contatos = new ArrayList<JavaBeans>();
-		String read = "select * from contatos order by nome";
+		String read = "select * from dbagenda.contatos order by nome";
 		try {
 			Connection con = conectar();
 			PreparedStatement pst = con.prepareStatement(read);
@@ -70,7 +70,7 @@ public class DAO {
 	}
 	
 	public JavaBeans selecionarContato(Integer pidcon) {
-		String read2 = "select * from contatos where idcon = " + String.valueOf(pidcon);
+		String read2 = "select * from dbagenda.contatos where idcon = " + String.valueOf(pidcon);
 		JavaBeans resultado = null;
 		try {
 			Connection con = conectar();
@@ -91,5 +91,33 @@ public class DAO {
 		}
 	}
 	
+	public void editarContato(JavaBeans contato) {
+		String create = "update dbagenda.contatos set nome=?,fone=?,email=? where idcon=?;";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(create);
+			pst.setString(1, contato.getNome());
+			pst.setString(2, contato.getFone());
+			pst.setString(3, contato.getEmail());
+			pst.setString(4, contato.getIdcon());
+			pst.executeUpdate();
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
 
+	public void excluirContato(String pidcon) {
+		String delete = "delete from dbagenda.contatos where idcon=?;";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(delete);
+			pst.setString(1, pidcon);
+			pst.executeUpdate();
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
 }

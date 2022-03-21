@@ -11,19 +11,19 @@
 </head>
 <body>
 	<h1>Editar contato</h1>
-	<form name="frmContato" action="">
+	<form name="frmContato" action="update">
 		<table>
 			<tr>
-				<td><input type="text" name="idCon" id="Caixa3" readonly value="<%out.print(request.getAttribute("idCon"));%>"></td>
+				<td><input type="text" name="idCon" id="caixa3" readonly value="<%out.print(request.getAttribute("idCon"));%>"></td>
 			</tr>
 			<tr>
-				<td><input type="text" name="nome" class="Caixa1" value="<%out.print(request.getAttribute("nome"));%>">></td>
+				<td><input type="text" name="nome" class="Caixa1" value="<%out.print(request.getAttribute("nome"));%>"></td>
 			</tr>
 			<tr>
-				<td><input type="text" name="fone" class="Caixa2" value="<%out.print(request.getAttribute("fone"));%>">></td>
+				<td><input type="text" name="fone" class="Caixa2" value="<%out.print(request.getAttribute("fone"));%>"></td>
 			</tr>
 			<tr>
-				<td><input type="text" name="email" class="Caixa1" value="<%out.print(request.getAttribute("email"));%>">></td>
+				<td><input type="text" name="email" class="Caixa1" value="<%out.print(request.getAttribute("email"));%>"></td>
 			</tr>
 		</table>
 		<input type="button" value="Salvar" class="Botao1"
